@@ -38,6 +38,19 @@ if (stage) {
   }).catch(() => stage.classList.add('no-webgl'));
 }
 
+// WebGL: visor 3D del Tótem en T
+const modelCanvas = document.getElementById('model-gl');
+if (modelCanvas) {
+  const visor = modelCanvas.closest('.visor');
+  import('./model-gl.js').then(({ initModel }) => {
+    const ok = initModel(modelCanvas, {
+      left: visor.querySelector('[data-turn="left"]'),
+      right: visor.querySelector('[data-turn="right"]'),
+    });
+    if (!ok) visor.classList.add('no-webgl');
+  }).catch(() => visor.classList.add('no-webgl'));
+}
+
 // WebGL: ondas NFC de fondo (nosotros y 404)
 document.querySelectorAll('[data-signal]').forEach((canvas) => {
   import('./signal-gl.js').then(({ initSignal }) => initSignal(canvas, canvas.dataset.signal));

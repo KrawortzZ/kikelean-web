@@ -35,7 +35,7 @@ function drawQR(ctx, x, y, size) {
   finder(x, y); finder(x + c * 14, y); finder(x, y + c * 14);
 }
 
-function cardTexture() {
+export function cardTexture() {
   const canvas = document.createElement('canvas');
   canvas.width = 600; canvas.height = 820;
   const ctx = canvas.getContext('2d');
@@ -90,7 +90,7 @@ function screenTexture() {
   return tex;
 }
 
-function dotTexture() {
+export function dotTexture() {
   const c = document.createElement('canvas');
   c.width = c.height = 64;
   const ctx = c.getContext('2d');
