@@ -4,6 +4,8 @@ import { readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 const root = dirname(fileURLToPath(import.meta.url));
+// En GitHub Pages el sitio vive en /kikelean-web/ (lo define el workflow con BASE_PATH).
+const base = process.env.BASE_PATH || '/';
 const read = (...p) => readFileSync(resolve(root, ...p), 'utf8');
 
 // Inserta el header y el footer compartidos en cada página (<!--#header--> / <!--#footer-->).
@@ -15,7 +17,9 @@ function partials() {
       handler: (html) =>
         html
           .replace('<!--#header-->', read('partials', 'header.html'))
-          .replace('<!--#footer-->', read('partials', 'footer.html')),
+          .replace('<!--#footer-->', read('partials', 'footer.html'))
+          // enlaces internos <a href="/..."> respetan la base del sitio
+          .replace(/(<a\b[^>]*?\bhref=")\/(?!\/)/g, `$1${base}`),
     },
   };
 }
@@ -61,6 +65,7 @@ function notFoundPage() {
 }
 
 export default defineConfig({
+  base,
   appType: 'mpa',
   plugins: [partials(), notFoundPage()],
   build: {
